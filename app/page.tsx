@@ -190,19 +190,26 @@ export default function KeDJPage() {
     // Mostrar mensaje de éxito
     setShowSuccessMessage(`"${track.name}" agregada a la playlist`)
 
+    // Enviar mensaje a WhatsApp con el título de la canción
+    sendGreetingToWhatsApp(track.name)
+
     // Ocultar mensaje después de 3 segundos
     setTimeout(() => {
       setShowSuccessMessage(null)
     }, 3000)
   }
 
-  const sendGreetingToWhatsApp = () => {
+  const sendGreetingToWhatsApp = (songTitle?: string) => {
     const message = `¡Hola! 👋
 
-Estoy usando #KeDJ! para agregar canciones a la playlist 🎵
+Acabo de pedir un tema en #KeDJ!${
+      songTitle
+        ? `
+🎵 "${songTitle}"`
+        : ""
+    }
 
-¡Saludos desde la feria! 💥
-Y que onda con eso? 🚀
+Saludos de la plaza! 💥
 Fecha: ${new Date().toLocaleString("es-AR")}`
 
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
@@ -458,7 +465,7 @@ Fecha: ${new Date().toLocaleString("es-AR")}`
 
         {/* Botón de saludo */}
         <button
-          onClick={sendGreetingToWhatsApp}
+          onClick={() => sendGreetingToWhatsApp()}
           className="mt-4 bg-[#25D366] hover:bg-[#20b858] text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center space-x-2 mx-auto"
         >
           <MessageCircle className="w-4 h-4" />
