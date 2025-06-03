@@ -1,8 +1,6 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Search, Loader2, Music, CheckCircle, MessageCircle, Instagram } from "lucide-react"
 import Image from "next/image"
 
@@ -33,8 +31,14 @@ export default function KeDJPage() {
   // Tu número de WhatsApp real
   const WHATSAPP_NUMBER = "5491127879534"
 
-  // Función para buscar en Spotify
+  // Cambiar el useEffect para buscar automáticamente
   const searchSpotify = async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([])
+      setShowResults(false)
+      return
+    }
+
     setIsLoading(true)
     setError(null)
 
@@ -49,6 +53,15 @@ export default function KeDJPage() {
       setIsLoading(false)
     }
   }
+
+  // Agregar useEffect para búsqueda automática
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      searchSpotify(searchQuery)
+    }, 500) // Esperar 500ms después de que el usuario deje de escribir
+
+    return () => clearTimeout(timeoutId)
+  }, [searchQuery])
 
   // Simulación de búsqueda en Spotify
   const mockSpotifySearch = async (query: string): Promise<SpotifyTrack[]> => {
@@ -174,13 +187,6 @@ export default function KeDJPage() {
         track.name.toLowerCase().includes(lowerQuery) ||
         track.artists.some((artist) => artist.name.toLowerCase().includes(lowerQuery)),
     )
-  }
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      searchSpotify(searchQuery)
-    }
   }
 
   const handleAddToPlaylist = (track: SpotifyTrack) => {
@@ -338,35 +344,19 @@ Fecha: ${new Date().toLocaleString("es-AR")}`
       </header>
 
       <section className="bg-white/10 backdrop-blur-md rounded-xl p-4 w-full shadow-2xl relative z-10 border border-white/20">
-        <form onSubmit={handleSearch} className="space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Buscar canción o artista..."
-              className="w-full pl-12 pr-4 py-3 text-gray-900 bg-white rounded-lg border-2 border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-[#ff7b00] hover:bg-[#e76b00] disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300 text-base focus:outline-none focus:ring-2 focus:ring-[#ff7b00] shadow-lg flex items-center justify-center space-x-2"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Buscando...</span>
-              </>
-            ) : (
-              <>
-                <Music className="w-5 h-5" />
-                <span>Agregar a la playlist</span>
-              </>
-            )}
-          </button>
-        </form>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          {isLoading && (
+            <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 animate-spin" />
+          )}
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Buscar canción o artista..."
+            className="w-full pl-12 pr-12 py-3 text-gray-900 bg-white rounded-lg border-2 border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all"
+          />
+        </div>
 
         {/* Resultados de búsqueda */}
         {showResults && (
@@ -416,7 +406,7 @@ Fecha: ${new Date().toLocaleString("es-AR")}`
                               <span className="text-xs font-semibold">Agregada</span>
                             </div>
                           ) : (
-                            <div className="flex items-center text-[#ff7b00]">
+                            <div className="flex items-center text-[#1DB954]">
                               <Music className="w-4 h-4 mr-1" />
                               <span className="text-xs font-semibold">Agregar</span>
                             </div>
