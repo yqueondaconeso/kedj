@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Search, Loader2, Music, CheckCircle, MessageCircle } from "lucide-react"
+import { Search, Loader2, Music, CheckCircle, MessageCircle, Instagram } from "lucide-react"
 import Image from "next/image"
 
 // Tipos para Spotify
@@ -205,7 +205,7 @@ export default function KeDJPage() {
 Acabo de pedir un tema en #KeDJ!${
       songTitle
         ? `
-🎵 "${songTitle}"`
+🎶 "${songTitle}"`
         : ""
     }
 
@@ -214,6 +214,10 @@ Fecha: ${new Date().toLocaleString("es-AR")}`
 
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
+  }
+
+  const openInstagram = () => {
+    window.open("https://www.instagram.com/yqueondaenlaferia", "_blank")
   }
 
   const clearSearch = () => {
@@ -231,151 +235,124 @@ Fecha: ${new Date().toLocaleString("es-AR")}`
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 flex flex-col items-center justify-start p-8 relative overflow-hidden">
-      {/* Guirnaldas de banderines */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Guirnalda superior */}
-        <div className="absolute top-0 left-0 w-full h-16 flex items-start justify-center">
-          <div className="flex space-x-1 transform -rotate-2">
-            {[...Array(12)].map((_, i) => (
-              <div
-                key={i}
-                className={`w-8 h-12 ${
-                  i % 4 === 0
-                    ? "bg-red-500"
-                    : i % 4 === 1
-                      ? "bg-yellow-400"
-                      : i % 4 === 2
-                        ? "bg-green-500"
-                        : "bg-blue-500"
-                } clip-triangle shadow-lg`}
-                style={{
-                  clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-                  animationDelay: `${i * 0.1}s`,
-                }}
-              />
-            ))}
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 text-white flex flex-col items-center justify-start p-4 relative overflow-hidden max-w-md mx-auto">
+      {/* Elementos decorativos espaciales y musicales - centrados */}
+      <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
+        {/* Cohetes */}
+        <div className="absolute top-20 text-3xl animate-bounce" style={{ animationDelay: "0s" }}>
+          🚀
+        </div>
+        <div className="absolute top-32 left-16 text-2xl animate-bounce" style={{ animationDelay: "1s" }}>
+          🚀
+        </div>
+        <div className="absolute top-32 right-16 text-2xl animate-bounce" style={{ animationDelay: "2s" }}>
+          🚀
         </div>
 
-        {/* Guirnalda izquierda */}
-        <div className="absolute top-20 left-4 h-96 flex flex-col items-center transform rotate-12">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className={`w-6 h-8 mb-1 ${
-                i % 3 === 0 ? "bg-pink-500" : i % 3 === 1 ? "bg-orange-500" : "bg-purple-500"
-              } shadow-md`}
-              style={{
-                clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-              }}
-            />
-          ))}
+        {/* Naves espaciales */}
+        <div className="absolute top-48 text-4xl animate-pulse" style={{ animationDelay: "0.5s" }}>
+          🛸
+        </div>
+        <div className="absolute top-64 left-12 text-3xl animate-pulse" style={{ animationDelay: "1.5s" }}>
+          🛸
+        </div>
+        <div className="absolute top-64 right-12 text-3xl animate-pulse" style={{ animationDelay: "2.5s" }}>
+          🛸
         </div>
 
-        {/* Guirnalda derecha */}
-        <div className="absolute top-20 right-4 h-96 flex flex-col items-center transform -rotate-12">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className={`w-6 h-8 mb-1 ${
-                i % 3 === 0 ? "bg-cyan-500" : i % 3 === 1 ? "bg-lime-500" : "bg-rose-500"
-              } shadow-md`}
-              style={{
-                clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-              }}
-            />
-          ))}
+        {/* Notas musicales */}
+        <div className="absolute top-80 text-3xl animate-ping" style={{ animationDelay: "0.3s" }}>
+          🎵
+        </div>
+        <div className="absolute top-96 left-8 text-2xl animate-ping" style={{ animationDelay: "1.3s" }}>
+          🎶
+        </div>
+        <div className="absolute top-96 right-8 text-2xl animate-ping" style={{ animationDelay: "2.3s" }}>
+          🎵
+        </div>
+        <div className="absolute bottom-32 text-3xl animate-ping" style={{ animationDelay: "3.3s" }}>
+          🎶
         </div>
 
-        {/* Luces parpadeantes */}
-        <div className="absolute top-12 left-1/4 w-4 h-4 bg-yellow-300 rounded-full animate-pulse shadow-lg shadow-yellow-300/50"></div>
-        <div
-          className="absolute top-32 right-1/4 w-3 h-3 bg-red-400 rounded-full animate-pulse shadow-lg shadow-red-400/50"
-          style={{ animationDelay: "0.5s" }}
-        ></div>
-        <div
-          className="absolute top-24 left-1/3 w-3 h-3 bg-blue-400 rounded-full animate-pulse shadow-lg shadow-blue-400/50"
-          style={{ animationDelay: "1s" }}
-        ></div>
-        <div
-          className="absolute top-40 right-1/3 w-4 h-4 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"
-          style={{ animationDelay: "1.5s" }}
-        ></div>
+        {/* Estrellas y planetas */}
+        <div className="absolute top-12 text-xl animate-pulse" style={{ animationDelay: "0.7s" }}>
+          ⭐
+        </div>
+        <div className="absolute top-36 left-20 text-lg animate-pulse" style={{ animationDelay: "1.7s" }}>
+          🌟
+        </div>
+        <div className="absolute top-36 right-20 text-lg animate-pulse" style={{ animationDelay: "2.7s" }}>
+          ⭐
+        </div>
+        <div className="absolute top-56 left-4 text-2xl animate-pulse" style={{ animationDelay: "1.2s" }}>
+          🪐
+        </div>
+        <div className="absolute top-56 right-4 text-2xl animate-pulse" style={{ animationDelay: "2.2s" }}>
+          🌙
+        </div>
 
-        {/* Confeti flotante */}
+        {/* Efectos de partículas */}
         <div
-          className="absolute top-16 left-1/5 w-2 h-2 bg-pink-400 rotate-45 animate-bounce"
-          style={{ animationDelay: "0.3s" }}
-        ></div>
-        <div
-          className="absolute top-28 right-1/5 w-2 h-2 bg-yellow-400 rotate-45 animate-bounce"
+          className="absolute top-44 left-8 w-2 h-2 bg-yellow-300 rounded-full animate-bounce"
           style={{ animationDelay: "0.8s" }}
         ></div>
         <div
-          className="absolute top-36 left-2/3 w-2 h-2 bg-cyan-400 rotate-45 animate-bounce"
-          style={{ animationDelay: "1.2s" }}
+          className="absolute top-44 right-8 w-2 h-2 bg-pink-400 rounded-full animate-bounce"
+          style={{ animationDelay: "1.8s" }}
         ></div>
-
-        {/* Estrellas decorativas */}
-        <div className="absolute top-20 left-1/6 text-yellow-400 text-xl animate-pulse">✨</div>
         <div
-          className="absolute top-44 right-1/6 text-pink-400 text-lg animate-pulse"
-          style={{ animationDelay: "0.7s" }}
-        >
-          ⭐
-        </div>
-        <div
-          className="absolute top-52 left-1/2 text-cyan-400 text-sm animate-pulse"
-          style={{ animationDelay: "1.4s" }}
-        >
-          ✨
-        </div>
+          className="absolute top-72 w-3 h-3 bg-cyan-400 rounded-full animate-bounce"
+          style={{ animationDelay: "2.8s" }}
+        ></div>
       </div>
 
       {/* Mensaje de éxito */}
       {showSuccessMessage && (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2">
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2 mx-4">
           <CheckCircle className="w-5 h-5" />
-          <span>{showSuccessMessage}</span>
+          <span className="text-sm">{showSuccessMessage}</span>
         </div>
       )}
 
-      <header className="text-center mb-8 relative z-10">
-        <div className="relative w-40 h-40 mx-auto mb-6">
+      <header className="text-center mb-6 relative z-10 w-full">
+        <div className="relative w-32 h-32 mx-auto mb-4">
           <Image
             src="/logo.png"
             alt="Y Que Onda Con Eso? - Logo de #KeDJ!"
-            width={160}
-            height={160}
+            width={128}
+            height={128}
             className="rounded-2xl object-contain mx-auto drop-shadow-2xl"
             priority
           />
         </div>
 
-        <h1 className="text-5xl font-bold text-[#bb86fc] mb-2 tracking-normal font-mono uppercase border-2 border-[#bb86fc] px-4 py-2 bg-[#bb86fc]/10 shadow-lg shadow-[#bb86fc]/20">
-          #KeDJ!
-        </h1>
+        <div className="relative">
+          <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-300 to-cyan-300 mb-2 tracking-wider transform rotate-1 font-sans">
+            #KeDJ!
+          </h1>
+          <div className="absolute -top-2 -right-2 text-2xl animate-spin">🎧</div>
+          <div className="absolute -top-1 -left-2 text-xl animate-bounce">🎤</div>
+        </div>
 
-        <p className="text-gray-700 text-lg font-semibold">¡Pedí tu tema y hacé vibrar la plaza!</p>
+        <p className="text-gray-200 text-base font-semibold px-4 mt-4">¡Pedí tu tema y hacé vibrar la plaza!</p>
       </header>
 
-      <section className="bg-gray-100 rounded-xl p-6 w-full max-w-md shadow-2xl relative z-10 border-2 border-gray-200">
+      <section className="bg-white/10 backdrop-blur-md rounded-xl p-4 w-full shadow-2xl relative z-10 border border-white/20">
         <form onSubmit={handleSearch} className="space-y-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar canción o artista..."
-              className="w-full pl-12 pr-4 py-3 text-gray-900 bg-white rounded-lg border-2 border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+              className="w-full pl-12 pr-4 py-3 text-gray-900 bg-white rounded-lg border-2 border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all"
             />
           </div>
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#ff7b00] hover:bg-[#e76b00] disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300 text-base focus:outline-none focus:ring-2 focus:ring-[#ff7b00] focus:ring-offset-2 focus:ring-offset-gray-100 shadow-lg flex items-center justify-center space-x-2"
+            className="w-full bg-[#ff7b00] hover:bg-[#e76b00] disabled:bg-gray-400 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300 text-base focus:outline-none focus:ring-2 focus:ring-[#ff7b00] shadow-lg flex items-center justify-center space-x-2"
           >
             {isLoading ? (
               <>
@@ -395,31 +372,31 @@ Fecha: ${new Date().toLocaleString("es-AR")}`
         {showResults && (
           <div className="mt-6">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Resultados:</h3>
-              <button onClick={clearSearch} className="text-gray-500 hover:text-gray-700 text-sm">
+              <h3 className="text-lg font-semibold text-white">Resultados:</h3>
+              <button onClick={clearSearch} className="text-gray-300 hover:text-white text-sm">
                 Limpiar
               </button>
             </div>
 
             {error ? (
               <div className="text-center py-8">
-                <p className="text-red-600">{error}</p>
-                <p className="text-sm text-gray-500 mt-2">Intenta de nuevo más tarde</p>
+                <p className="text-red-400">{error}</p>
+                <p className="text-sm text-gray-300 mt-2">Intenta de nuevo más tarde</p>
               </div>
             ) : searchResults.length > 0 ? (
               <div className="space-y-3 max-h-64 overflow-y-auto">
                 {searchResults.map((track) => (
                   <div
                     key={track.id}
-                    className={`bg-white rounded-lg p-4 transition-colors cursor-pointer border-2 ${
+                    className={`bg-white/20 backdrop-blur-sm rounded-lg p-4 transition-colors cursor-pointer border ${
                       addedSongs.has(track.id)
-                        ? "border-green-400 bg-green-50"
-                        : "border-gray-200 hover:border-purple-300 hover:bg-gray-50"
+                        ? "border-green-400 bg-green-400/20"
+                        : "border-white/30 hover:border-yellow-400/50 hover:bg-white/30"
                     }`}
                     onClick={() => !addedSongs.has(track.id) && handleAddToPlaylist(track)}
                   >
                     <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 flex-shrink-0 bg-gray-200 rounded overflow-hidden">
+                      <div className="w-12 h-12 flex-shrink-0 bg-gray-800 rounded overflow-hidden">
                         <Image
                           src={track.album.images[0]?.url || "/placeholder.svg?height=48&width=48"}
                           alt={track.album.name}
@@ -429,12 +406,12 @@ Fecha: ${new Date().toLocaleString("es-AR")}`
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-gray-900 truncate">{track.name}</h4>
-                        <p className="text-sm text-gray-600 truncate">{track.artists.map((a) => a.name).join(", ")}</p>
+                        <h4 className="font-semibold text-white truncate">{track.name}</h4>
+                        <p className="text-sm text-gray-300 truncate">{track.artists.map((a) => a.name).join(", ")}</p>
                         <div className="flex items-center justify-between mt-1">
-                          <p className="text-xs text-gray-500">{formatDuration(track.duration_ms)}</p>
+                          <p className="text-xs text-gray-400">{formatDuration(track.duration_ms)}</p>
                           {addedSongs.has(track.id) ? (
-                            <div className="flex items-center text-green-600">
+                            <div className="flex items-center text-green-400">
                               <CheckCircle className="w-4 h-4 mr-1" />
                               <span className="text-xs font-semibold">Agregada</span>
                             </div>
@@ -452,25 +429,35 @@ Fecha: ${new Date().toLocaleString("es-AR")}`
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-600">No se encontraron canciones</p>
-                <p className="text-sm text-gray-500 mt-2">Probá con otro término de búsqueda</p>
+                <p className="text-gray-300">No se encontraron canciones</p>
+                <p className="text-sm text-gray-400 mt-2">Probá con otro término de búsqueda</p>
               </div>
             )}
           </div>
         )}
       </section>
 
-      <div className="mt-8 text-center text-gray-700 text-sm relative z-10">
-        <p className="font-semibold">💥 La feria de tu barrio 💥</p>
+      <div className="mt-6 text-center text-gray-200 text-sm relative z-10 w-full">
+        <p className="font-semibold text-yellow-300">💥 La feria de tu barrio 💥</p>
 
-        {/* Botón de saludo */}
-        <button
-          onClick={() => sendGreetingToWhatsApp()}
-          className="mt-4 bg-[#25D366] hover:bg-[#20b858] text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center space-x-2 mx-auto"
-        >
-          <MessageCircle className="w-4 h-4" />
-          <span>Mandar un saludo</span>
-        </button>
+        {/* Botones de redes sociales */}
+        <div className="flex flex-col gap-3 mt-4">
+          <button
+            onClick={() => sendGreetingToWhatsApp()}
+            className="bg-[#25D366] hover:bg-[#20b858] text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center space-x-2 w-full"
+          >
+            <MessageCircle className="w-4 h-4" />
+            <span>Mandar un saludo</span>
+          </button>
+
+          <button
+            onClick={openInstagram}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center space-x-2 w-full"
+          >
+            <Instagram className="w-4 h-4" />
+            <span>Seguinos en Instagram</span>
+          </button>
+        </div>
 
         <p className="mt-4 text-xs opacity-75">Y que onda con eso? 🚀</p>
       </div>
