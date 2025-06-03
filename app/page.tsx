@@ -189,6 +189,9 @@ export default function KeDJPage() {
     )
   }
 
+  // Modificar la función handleAddToPlaylist para que no abra WhatsApp automáticamente
+  // Reemplazar la función actual con esta versión:
+
   const handleAddToPlaylist = (track: SpotifyTrack) => {
     // Agregar la canción a la lista de agregadas
     setAddedSongs((prev) => new Set([...prev, track.id]))
@@ -196,8 +199,8 @@ export default function KeDJPage() {
     // Mostrar mensaje de éxito
     setShowSuccessMessage(`"${track.name}" agregada a la playlist`)
 
-    // Enviar mensaje a WhatsApp con el título de la canción
-    sendGreetingToWhatsApp(track.name)
+    // Ya NO enviamos mensaje a WhatsApp automáticamente
+    // Eliminamos: sendGreetingToWhatsApp(track.name)
 
     // Ocultar mensaje después de 3 segundos
     setTimeout(() => {
