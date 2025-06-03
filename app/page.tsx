@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Search, Loader2 } from "lucide-react"
+import { Search, Loader2, Music, CheckCircle, MessageCircle } from "lucide-react"
 import Image from "next/image"
 
 // Tipos para Spotify
@@ -27,6 +27,11 @@ export default function KeDJPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [showResults, setShowResults] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [addedSongs, setAddedSongs] = useState<Set<string>>(new Set())
+  const [showSuccessMessage, setShowSuccessMessage] = useState<string | null>(null)
+
+  // Tu número de WhatsApp real
+  const WHATSAPP_NUMBER = "5491127879534"
 
   // Función para buscar en Spotify
   const searchSpotify = async (query: string) => {
@@ -178,9 +183,30 @@ export default function KeDJPage() {
     }
   }
 
-  const handleSelectSong = (track: SpotifyTrack) => {
-    // Redirigir a la página de pago
-    window.location.href = `/payment?songId=${track.id}&title=${encodeURIComponent(track.name)}&artist=${encodeURIComponent(track.artists.map((a) => a.name).join(", "))}&price=100&imageUrl=${encodeURIComponent(track.album.images[0]?.url || "")}&spotifyUrl=${encodeURIComponent(track.external_urls.spotify)}`
+  const handleAddToPlaylist = (track: SpotifyTrack) => {
+    // Agregar la canción a la lista de agregadas
+    setAddedSongs((prev) => new Set([...prev, track.id]))
+
+    // Mostrar mensaje de éxito
+    setShowSuccessMessage(`"${track.name}" agregada a la playlist`)
+
+    // Ocultar mensaje después de 3 segundos
+    setTimeout(() => {
+      setShowSuccessMessage(null)
+    }, 3000)
+  }
+
+  const sendGreetingToWhatsApp = () => {
+    const message = `¡Hola! 👋
+
+Estoy usando #KeDJ! para agregar canciones a la playlist 🎵
+
+¡Saludos desde la feria! 💥
+Y que onda con eso? 🚀
+Fecha: ${new Date().toLocaleString("es-AR")}`
+
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+    window.open(whatsappUrl, "_blank")
   }
 
   const clearSearch = () => {
@@ -300,11 +326,19 @@ export default function KeDJPage() {
         </div>
       </div>
 
+      {/* Mensaje de éxito */}
+      {showSuccessMessage && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2">
+          <CheckCircle className="w-5 h-5" />
+          <span>{showSuccessMessage}</span>
+        </div>
+      )}
+
       <header className="text-center mb-8 relative z-10">
         <div className="relative w-40 h-40 mx-auto mb-6">
           <Image
             src="/logo.png"
-            alt="Y Que Onda Con Eso? - Logo de Ke DJ"
+            alt="Y Que Onda Con Eso? - Logo de #KeDJ!"
             width={160}
             height={160}
             className="rounded-2xl object-contain mx-auto drop-shadow-2xl"
@@ -313,7 +347,7 @@ export default function KeDJPage() {
         </div>
 
         <h1 className="text-5xl font-bold text-[#bb86fc] mb-2 tracking-normal font-mono uppercase border-2 border-[#bb86fc] px-4 py-2 bg-[#bb86fc]/10 shadow-lg shadow-[#bb86fc]/20">
-          KE DJ
+          #KeDJ!
         </h1>
 
         <p className="text-gray-700 text-lg font-semibold">¡Pedí tu tema y hacé vibrar la plaza!</p>
@@ -343,8 +377,8 @@ export default function KeDJPage() {
               </>
             ) : (
               <>
-                <Search className="w-5 h-5" />
-                <span>Hace sonar la rola</span>
+                <Music className="w-5 h-5" />
+                <span>Agregar a la playlist</span>
               </>
             )}
           </button>
@@ -370,8 +404,12 @@ export default function KeDJPage() {
                 {searchResults.map((track) => (
                   <div
                     key={track.id}
-                    className="bg-white rounded-lg p-4 hover:bg-gray-50 transition-colors cursor-pointer border-2 border-gray-200 hover:border-purple-300"
-                    onClick={() => handleSelectSong(track)}
+                    className={`bg-white rounded-lg p-4 transition-colors cursor-pointer border-2 ${
+                      addedSongs.has(track.id)
+                        ? "border-green-400 bg-green-50"
+                        : "border-gray-200 hover:border-purple-300 hover:bg-gray-50"
+                    }`}
+                    onClick={() => !addedSongs.has(track.id) && handleAddToPlaylist(track)}
                   >
                     <div className="flex items-center space-x-3">
                       <div className="w-12 h-12 flex-shrink-0 bg-gray-200 rounded overflow-hidden">
@@ -388,10 +426,17 @@ export default function KeDJPage() {
                         <p className="text-sm text-gray-600 truncate">{track.artists.map((a) => a.name).join(", ")}</p>
                         <div className="flex items-center justify-between mt-1">
                           <p className="text-xs text-gray-500">{formatDuration(track.duration_ms)}</p>
-                          <div className="flex items-center">
-                            <p className="text-[#ff7b00] font-bold mr-1">$100</p>
-                            <p className="text-xs text-gray-500">ARS</p>
-                          </div>
+                          {addedSongs.has(track.id) ? (
+                            <div className="flex items-center text-green-600">
+                              <CheckCircle className="w-4 h-4 mr-1" />
+                              <span className="text-xs font-semibold">Agregada</span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center text-[#ff7b00]">
+                              <Music className="w-4 h-4 mr-1" />
+                              <span className="text-xs font-semibold">Agregar</span>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -410,8 +455,17 @@ export default function KeDJPage() {
 
       <div className="mt-8 text-center text-gray-700 text-sm relative z-10">
         <p className="font-semibold">💥 La feria de tu barrio 💥</p>
-        <p className="mt-2 text-xs opacity-75">Y que onda con eso? 🚀</p>
-        <p className="mt-2 text-xs opacity-75">💰 Cada canción: $100 ARS</p>
+
+        {/* Botón de saludo */}
+        <button
+          onClick={sendGreetingToWhatsApp}
+          className="mt-4 bg-[#25D366] hover:bg-[#20b858] text-white font-bold py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center space-x-2 mx-auto"
+        >
+          <MessageCircle className="w-4 h-4" />
+          <span>Mandar un saludo</span>
+        </button>
+
+        <p className="mt-4 text-xs opacity-75">Y que onda con eso? 🚀</p>
       </div>
     </div>
   )
